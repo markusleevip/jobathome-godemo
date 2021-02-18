@@ -8,7 +8,7 @@ import (
 	"go-server/initialize"
 )
 
-func InitServer(){
+func InitServer() {
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Use(logger.New(logger.Config{
@@ -16,7 +16,6 @@ func InitServer(){
 		TimeZone:   "Asia/Shanghai",
 	}))
 
-
 	routes.InitRoutes(app)
-	app.Listen(initialize.Application.Host+":"+initialize.Application.Port)
+	app.Listen(initialize.Application.Host + ":" + initialize.Application.Port)
 }

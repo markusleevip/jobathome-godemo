@@ -14,36 +14,36 @@ import (
 )
 
 type Account struct {
-
 }
 
-func Login(ctx *fiber.Ctx) error{
+func Login(ctx *fiber.Ctx) error {
 	fmt.Println(ctx.Get("Content-Type"))
 	fmt.Println(string(ctx.Body()))
 	var body dto.LoginReq
-	if err := ctx.BodyParser(&body) ; err !=nil {
+	if err := ctx.BodyParser(&body); err != nil {
 		log.Println(err)
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error":"Cannot parse json.",
+			"error": "Cannot parse json.",
 		})
 	}
 	log.Println(body)
-	if body.Username== "markus" && body.Password == "123456" {
+	log.Println("password=",body.Password)
+	if body.Username == "markus" && body.Password == "123456" {
 		token := utils.GetToken()
 		claims := token.Claims.(jwt.MapClaims)
 		claims["name"] = body.Username
 		claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
-		if tokenKey , err := token.SignedString([]byte(global.JwtSecret)) ; err != nil {
+		if tokenKey, err := token.SignedString([]byte(global.JwtSecret)); err != nil {
 			log.Println(err)
 			return ctx.Status(fiber.StatusBadRequest).JSON(
 				kit.FailAndMsg(err.Error()))
-		}else {
+		} else {
 			res := dto.LoginRes{}
 			res.Token = tokenKey
 			res.Username = body.Username
 			return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 		}
-	}else {
+	} else {
 		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号或者密码错误。"))
 	}
 	return nil
@@ -51,22 +51,22 @@ func Login(ctx *fiber.Ctx) error{
 }
 
 // 注册
-func Logon(ctx *fiber.Ctx) error{
-	var body dto.Logon
-	if err := ctx.BodyParser(&body) ; err !=nil {
-		ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error":"Cannot parse json.",
+func Logon(ctx *fiber.Ctx) error {
+	var body dto.LogonReq
+	if err := ctx.BodyParser(&body); err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse json.",
 		})
-		return nil
 	}
-	return ctx.Status(fiber.StatusOK).JSON(body)
+	log.Println(body)
+	res := dto.LogonRes{}
+	res.Username = body.Username
+	return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 }
 
-
-
-func CheckToken(ctx *fiber.Ctx) error{
+func CheckToken(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
-	claims :=  user.Claims.(jwt.MapClaims)
+	claims := user.Claims.(jwt.MapClaims)
 	name := claims["name"].(string)
 	fmt.Println(string(ctx.Request().Header.RawHeaders()))
 	fmt.Println(user)
@@ -75,12 +75,11 @@ func CheckToken(ctx *fiber.Ctx) error{
 	return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 }
 
-
-func Restricted(ctx *fiber.Ctx) error{
+func Restricted(ctx *fiber.Ctx) error {
 	user := ctx.Locals("user").(*jwt.Token)
-	claims :=  user.Claims.(jwt.MapClaims)
+	claims := user.Claims.(jwt.MapClaims)
 	name := claims["name"].(string)
 	fmt.Println(string(ctx.Request().Header.RawHeaders()))
 	fmt.Println(user)
-	return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(fmt.Sprintf("Hello %s Welcome to Job@Home." ,name)))
+	return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(fmt.Sprintf("Hello %s Welcome to Job@Home.", name)))
 }

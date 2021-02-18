@@ -17,15 +17,15 @@ type Mysql struct {
 func (e *Mysql) Setup() {
 
 	global.DBSource = e.GetConnect()
-	db, err := sql.Open("mysql",e.GetConnect())
+	db, err := sql.Open("mysql", e.GetConnect())
 	if err != nil {
 		log.Fatal(err)
 	}
 	global.Cfg.SetDb(&global.DBConfig{
-		Driver : e.GetDriver(),
-		DB: db,
+		Driver: e.GetDriver(),
+		DB:     db,
 	})
-	global.GDB , err = e.Open(db, &gorm.Config{
+	global.GDB, err = e.Open(db, &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
@@ -38,14 +38,12 @@ func (e *Mysql) Setup() {
 		log.Fatal(global.GDB.Error)
 	}
 
-
 }
 
 // Open 打开数据库连接
 func (e *Mysql) Open(db *sql.DB, cfg *gorm.Config) (*gorm.DB, error) {
 	return gorm.Open(mysql.New(mysql.Config{Conn: db}), cfg)
 }
-
 
 // GetConnect 获取数据库连接
 func (e *Mysql) GetConnect() string {

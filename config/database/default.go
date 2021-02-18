@@ -16,5 +16,4 @@ func InitDataBase(driver string) {
 
 	global.GDB.AutoMigrate(&models.Account{})
 
-
 }

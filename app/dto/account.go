@@ -1,21 +1,25 @@
 package dto
 
 type LoginReq struct {
-	Username    string       `json:"userName"`
-	Password    string       `json:"password"`
+	Username string `json:"userName"`
+	Password string `json:"password"`
 }
 
 type LoginRes struct {
-	Username    string       `json:"userName"`
-	Token		string		 `json:"token"`
+	Username string `json:"userName"`
+	Token    string `json:"token"`
 }
 
-type Logon struct {
-	Username    string       `json:"userName"`
-	Password    string       `json:"password"`
-	rePassword    string       `json:"rePassword"`
-	NickName    string       `json:"nickName"`
-	Phone    string       	 `json:"phone"`
-	Email    string       	 `json:"email"`
-	Avatar   string       	 `json:"avatar"`
+type LogonReq struct {
+	Username   string `json:"userName"`
+	Password   string `json:"password"`
+	NickName   string `json:"nickName"`
+	Phone      string `json:"phone"`
+	Email      string `json:"email"`
+	Avatar     string `json:"avatar"`
+}
+
+
+type LogonRes struct {
+	Username   string `json:"userName"`
 }

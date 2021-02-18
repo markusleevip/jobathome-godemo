@@ -6,16 +6,15 @@ import (
 	"go-server/app/middleware"
 )
 
-func InitRoutes(app *fiber.App){
+func InitRoutes(app *fiber.App) {
 	// 登录
-	app.Get("/login",handles.Login)
-	app.Post("/login",handles.Login)
+	app.Get("/login", handles.Login)
+	app.Post("/login", handles.Login)
 	// 注册
-	app.Get("/logon",handles.Logon)
+	app.Post("/logon", handles.Logon)
 
-	app.Post("/restricted",middleware.Auth(), handles.Restricted)
+	app.Post("/restricted", middleware.Auth(), handles.Restricted)
 
-	app.Post("/checkToken",middleware.Auth(), handles.CheckToken)
-
+	app.Post("/checkToken", middleware.Auth(), handles.CheckToken)
 
 }
