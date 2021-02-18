@@ -1,7 +1,7 @@
 # jobathome-godemo
 jobathome-godemo
 
-### 编译与支持
+### 编译与执行
 ```
 编译
 go build 
