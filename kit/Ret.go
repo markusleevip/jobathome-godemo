@@ -1,14 +1,14 @@
 package kit
 
 type Ret struct {
-	Code int 		 `json:"code"`
+	Code int         `json:"code"`
 	Data interface{} `json:"data"`
 	Msg  string      `json:"msg"`
 }
 
 const (
 	SUCCESS = "Success"
-	FAIL = "Fail"
+	FAIL    = "Fail"
 )
 
 func Ok() (r Ret) {
@@ -28,7 +28,7 @@ func FailAndMsg(msg string) (r Ret) {
 	r.Msg = msg
 	return r
 }
-func OkAndData(data interface{})   (r Ret) {
+func OkAndData(data interface{}) (r Ret) {
 	r.Code = 200
 	r.Msg = SUCCESS
 	r.Data = data

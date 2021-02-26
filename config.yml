@@ -4,7 +4,7 @@ application:
   # 服务名称
   name: Job@Home
   # 端口号
-  port: 8005 # 服务端口号
+  port: 8001 # 服务端口号
   jwtSecret: JobAtHome
   jwtTimeout: 4320 # 24* 180 小时
 database:

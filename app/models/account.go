@@ -1,5 +1,7 @@
 package models
 
+import "go-server/global"
+
 type Account struct {
 	Common
 	Username string `json:"userName" gorm:"size:64;comment:用户登录名"`
@@ -10,7 +12,19 @@ type Account struct {
 	Email    string `json:"email" gorm:"size:128;comment:邮箱"`
 	Avatar   string `json:"avatar" gorm:"size:128;default:x.jpg;comment:用户头像"`
 	Status   int    `json:"status" gorm:"size:4;default:0;comment:用户状态"`
+	Age 	int 	`json:"age" gorm:"size:4;default:0;comment:年龄"`
 }
 
-func ( a *Account ) GetUser(userName string) {
+func (t *Account) Create(){
+	global.GDB.Create(t)
+}
+
+func  (t *Account) GetUser() (data Account,err error )  {
+	if err = global.GDB.First(&data,"username = ?",t.Username).Error ; err != nil {
+		return Account{}, err
+	}else {
+		return data, nil
+	}
+
+
 }

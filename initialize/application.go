@@ -9,18 +9,17 @@ type application struct {
 	Port          string
 	Name          string
 	JwtSecret     string
-	JwtTimeout	  string
+	JwtTimeout    string
 }
 
 func initApplication(cfg *viper.Viper) *application {
 	return &application{
-		Host:          cfg.GetString("host"),
-		Port:          cfg.GetString("port"),
-		Name:          cfg.GetString("name"),
-		JwtSecret:     cfg.GetString("jwtSecret"),
-		JwtTimeout:    cfg.GetString("jwtTimeout"),
+		Host:       cfg.GetString("host"),
+		Port:       cfg.GetString("port"),
+		Name:       cfg.GetString("name"),
+		JwtSecret:  cfg.GetString("jwtSecret"),
+		JwtTimeout: cfg.GetString("jwtTimeout"),
 	}
 }
 
 var Application = new(application)
-

@@ -5,6 +5,7 @@ import (
 	"github.com/form3tech-oss/jwt-go"
 	"github.com/gofiber/fiber/v2"
 	"go-server/app/dto"
+	"go-server/app/models"
 	"go-server/global"
 	"go-server/kit"
 	"go-server/utils"
@@ -28,24 +29,31 @@ func Login(ctx *fiber.Ctx) error {
 	}
 	log.Println(body)
 	log.Println("password=",body.Password)
-	if body.Username == "markus" && body.Password == "123456" {
-		token := utils.GetToken()
-		claims := token.Claims.(jwt.MapClaims)
-		claims["name"] = body.Username
-		claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
-		if tokenKey, err := token.SignedString([]byte(global.JwtSecret)); err != nil {
-			log.Println(err)
-			return ctx.Status(fiber.StatusBadRequest).JSON(
-				kit.FailAndMsg(err.Error()))
-		} else {
-			res := dto.LoginRes{}
-			res.Token = tokenKey
-			res.Username = body.Username
-			return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
+	account := models.Account{Username: body.Username,Password: body.Password}
+	if data, err := account.GetUser() ; err != nil {
+		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号不存在。"))
+	}else {
+		if data.Password == body.Password {
+			// 账号密码验证成功
+			token := utils.GetToken()
+			claims := token.Claims.(jwt.MapClaims)
+			claims["name"] = body.Username
+			claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
+			if tokenKey, err := token.SignedString([]byte(global.JwtSecret)); err != nil {
+				log.Println(err)
+				return ctx.Status(fiber.StatusBadRequest).JSON(
+					kit.FailAndMsg(err.Error()))
+			} else {
+				res := dto.LoginRes{}
+				res.Token = tokenKey
+				res.Username = body.Username
+				return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
+			}
+		}else{
+			return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号或者密码错误。"))
 		}
-	} else {
-		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号或者密码错误。"))
 	}
+
 	return nil
 
 }
@@ -61,7 +69,19 @@ func Logon(ctx *fiber.Ctx) error {
 	log.Println(body)
 	res := dto.LogonRes{}
 	res.Username = body.Username
-	return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
+	account := models.Account{Username: body.Username,Password: body.Password}
+	if data, err := account.GetUser() ; err != nil {
+		// 进行注册操作
+		log.Println(err)
+		account.Create()
+		return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
+	}else {
+		// 用户已经存在
+		log.Println("data=",data)
+		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号已经存在。"))
+	}
+
+
 }
 
 func CheckToken(ctx *fiber.Ctx) error {

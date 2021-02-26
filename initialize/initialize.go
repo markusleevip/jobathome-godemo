@@ -6,14 +6,14 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Initialize(){
+func Initialize() {
 	var config string
 	flag.StringVar(&config, "c", "config.yml", "choose config file.")
 	flag.Parse()
 
 	v := viper.New()
 	v.SetConfigFile(config)
-	if err := v.ReadInConfig(); err !=nil {
+	if err := v.ReadInConfig(); err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
 	}
 	v.WatchConfig()

@@ -9,19 +9,21 @@ import (
 const (
 	Version = "1.0.0"
 )
+
 var (
-	DBSource 	string
-	DBDriver 	string
-	DBName 		string
-	GDB  		*gorm.DB
-	JwtSecret 	string
-	JwtTimeout 	string
+	DBSource   string
+	DBDriver   string
+	DBName     string
+	GDB        *gorm.DB
+	JwtSecret  string
+	JwtTimeout string
 )
 
-func Initialize(){
+func Initialize() {
 	JwtSecret = initialize.Application.JwtSecret
 	JwtTimeout = initialize.Application.JwtTimeout
 }
+
 var Cfg = DefaultConfig()
 
 type DBConfig struct {
@@ -30,7 +32,7 @@ type DBConfig struct {
 }
 
 type Config struct {
-	db * DBConfig
+	db *DBConfig
 }
 
 // SetDb 设置单个db
