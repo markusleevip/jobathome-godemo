@@ -13,8 +13,15 @@ func InitRoutes(app *fiber.App) {
 	// 注册
 	app.Post("/logon", handles.Logon)
 
+	app.Get("/qr",handles.QrTest)
+
 	app.Post("/restricted", middleware.Auth(), handles.Restricted)
 
 	app.Post("/checkToken", middleware.Auth(), handles.CheckToken)
+
+	my := app.Group("/my",middleware.Auth())
+	my.Post("/resume",handles.Resume{}.MyResume)
+	my.Put("/resume/save",handles.Resume{}.Save)
+
 
 }

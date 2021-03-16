@@ -28,16 +28,17 @@ func Login(ctx *fiber.Ctx) error {
 		})
 	}
 	log.Println(body)
-	log.Println("password=",body.Password)
-	account := models.Account{Username: body.Username,Password: body.Password}
-	if data, err := account.GetUser() ; err != nil {
+	log.Println("password=", body.Password)
+	account := models.Account{Username: body.Username, Password: body.Password}
+	if data, err := account.GetUser(); err != nil {
 		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号不存在。"))
-	}else {
-		if data.Password == body.Password {
+	} else {
+		if data.Password == utils.Sha1(body.Password+data.Salt) {
 			// 账号密码验证成功
 			token := utils.GetToken()
 			claims := token.Claims.(jwt.MapClaims)
 			claims["name"] = body.Username
+			claims["uid"] = data.Uid
 			claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
 			if tokenKey, err := token.SignedString([]byte(global.JwtSecret)); err != nil {
 				log.Println(err)
@@ -49,7 +50,7 @@ func Login(ctx *fiber.Ctx) error {
 				res.Username = body.Username
 				return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 			}
-		}else{
+		} else {
 			return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号或者密码错误。"))
 		}
 	}
@@ -69,18 +70,17 @@ func Logon(ctx *fiber.Ctx) error {
 	log.Println(body)
 	res := dto.LogonRes{}
 	res.Username = body.Username
-	account := models.Account{Username: body.Username,Password: body.Password}
-	if data, err := account.GetUser() ; err != nil {
+	account := models.Account{Uid: utils.NewGenId(),Username: body.Username, Password: body.Password}
+	if data, err := account.GetUser(); err != nil {
 		// 进行注册操作
 		log.Println(err)
 		account.Create()
 		return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
-	}else {
+	} else {
 		// 用户已经存在
-		log.Println("data=",data)
+		log.Println("data=", data)
 		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg("账号已经存在。"))
 	}
-
 
 }
 

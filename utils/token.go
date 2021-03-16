@@ -7,3 +7,4 @@ import (
 func GetToken() *jwt.Token {
 	return jwt.New(jwt.SigningMethodHS256)
 }
+
