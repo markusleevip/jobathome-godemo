@@ -7,7 +7,7 @@ import (
 	"go-server/global"
 )
 
-func Sha1(plain  string) string {
+func Sha1(plain string) string {
 	secret := global.JwtSecret
 	key := []byte(secret)
 	pla := []byte(plain)
@@ -16,4 +16,3 @@ func Sha1(plain  string) string {
 	cip := mac.Sum(nil)
 	return base64.StdEncoding.EncodeToString(cip)
 }
-

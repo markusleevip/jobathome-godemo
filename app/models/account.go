@@ -8,7 +8,7 @@ import (
 
 type Account struct {
 	Common
-	Uid	 string `json:"uid" gorm:"size:32;comment:用户id"`
+	Uid      string `json:"uid" gorm:"size:32;comment:用户id"`
 	Username string `json:"userName" gorm:"size:64;comment:用户登录名"`
 	Password string `json:"password"  gorm:"size:64;comment:用户登录密码"`
 	Salt     string `json:"salt" gorm:"size:64;comment:加盐"`
@@ -21,7 +21,7 @@ type Account struct {
 }
 
 func (Account) TableName() string {
-	return Prefix+"account"
+	return Prefix + "account"
 }
 
 func (t *Account) Create() {
@@ -31,7 +31,6 @@ func (t *Account) Create() {
 	fmt.Println(t.Password)
 	global.GDB.Create(t)
 }
-
 
 func (t *Account) GetUser() (data Account, err error) {
 	if err = global.GDB.First(&data, "username = ?", t.Username).Error; err != nil {

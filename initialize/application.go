@@ -10,6 +10,7 @@ type application struct {
 	Name          string
 	JwtSecret     string
 	JwtTimeout    string
+	BaseUrl       string
 }
 
 func initApplication(cfg *viper.Viper) *application {
@@ -19,6 +20,7 @@ func initApplication(cfg *viper.Viper) *application {
 		Name:       cfg.GetString("name"),
 		JwtSecret:  cfg.GetString("jwtSecret"),
 		JwtTimeout: cfg.GetString("jwtTimeout"),
+		BaseUrl:    cfg.GetString("baseUrl"),
 	}
 }
 

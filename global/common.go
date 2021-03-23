@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"go-server/initialize"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 const (
@@ -16,12 +17,18 @@ var (
 	DBName     string
 	GDB        *gorm.DB
 	JwtSecret  string
-	JwtTimeout string
+	JwtTimeout = 129600
+	BaseUrl    = ""
 )
 
 func Initialize() {
 	JwtSecret = initialize.Application.JwtSecret
-	JwtTimeout = initialize.Application.JwtTimeout
+	BaseUrl = initialize.Application.BaseUrl
+
+	if timeout, err := strconv.Atoi(initialize.Application.JwtTimeout); err != nil {
+	} else {
+		JwtTimeout = timeout
+	}
 }
 
 var Cfg = DefaultConfig()

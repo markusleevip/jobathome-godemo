@@ -6,7 +6,8 @@ application:
   # 端口号
   port: 8001 # 服务端口号
   jwtSecret: JobAtHome
-  jwtTimeout: 4320 # 24* 180 小时
+  jwtTimeout: 1440 # 60 * 24 分钟
+  baseUrl: http://127.0.0.1:8001
 database:
   # 数据库类型 mysql，sqlite3， postgres
   driver: mysql

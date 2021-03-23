@@ -19,7 +19,6 @@ type LogonReq struct {
 	Avatar     string `json:"avatar"`
 }
 
-
 type LogonRes struct {
 	Username   string `json:"userName"`
 }
