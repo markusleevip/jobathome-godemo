@@ -2,6 +2,7 @@ package global
 
 import (
 	"database/sql"
+	"github.com/go-redis/redis"
 	"go-server/initialize"
 	"gorm.io/gorm"
 	"strconv"
@@ -19,6 +20,7 @@ var (
 	JwtSecret  string
 	JwtTimeout = 129600
 	BaseUrl    = ""
+	Redis      *redis.Client
 )
 
 func Initialize() {

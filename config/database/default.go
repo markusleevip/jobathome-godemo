@@ -20,5 +20,6 @@ func InitDataBase(driver string) {
 	global.GDB.AutoMigrate(&models.JobExperience{})
 	global.GDB.AutoMigrate(&models.Education{})
 	global.GDB.AutoMigrate(&models.Resume{})
+	global.GDB.AutoMigrate(&models.Friend{})
 
 }

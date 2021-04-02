@@ -11,14 +11,14 @@ type LoginRes struct {
 }
 
 type LogonReq struct {
-	Username   string `json:"userName"`
-	Password   string `json:"password"`
-	NickName   string `json:"nickName"`
-	Phone      string `json:"phone"`
-	Email      string `json:"email"`
-	Avatar     string `json:"avatar"`
+	Username string `json:"userName"`
+	Password string `json:"password"`
+	NickName string `json:"nickName"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Avatar   string `json:"avatar"`
 }
 
 type LogonRes struct {
-	Username   string `json:"userName"`
+	Username string `json:"userName"`
 }

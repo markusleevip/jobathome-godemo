@@ -25,9 +25,10 @@ func QrTest(ctx *fiber.Ctx) error {
 }
 
 func GetResumeQr(ctx *fiber.Ctx) error {
-	resumeId := ctx.Params(" ")
+	resumeId := ctx.Params("resumeId")
 	fmt.Println("BaseUrl=" + global.BaseUrl)
-	url := ctx.FormValue("url", global.BaseUrl)+"/show/resume/"+resumeId
+	fmt.Println("resumeId=" + resumeId)
+	url := ctx.FormValue("url", global.BaseUrl) + "/show/resume?resumeId=" + resumeId
 	fmt.Println(url)
 	var png []byte
 	png, err := qrcode.Encode(url, qrcode.Medium, 128)

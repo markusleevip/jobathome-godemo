@@ -28,4 +28,8 @@ func Initialize() {
 		panic("No found database in the configuration")
 	}
 	Database = initDatabase(cfgDatabase)
+
+	if cfgRedis := v.Sub("redis"); cfgRedis != nil {
+		RedisConf = initRedis(cfgRedis)
+	}
 }

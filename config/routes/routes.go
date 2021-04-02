@@ -23,6 +23,7 @@ func InitRoutes(app *fiber.App) {
 	my := app.Group("/my", middleware.Auth())
 	my.Post("/resume", handles.Resume{}.MyResume)
 	my.Put("/resume/save", handles.Resume{}.Save)
+	my.Post("/follow", handles.Friend{}.MyFollow)
 	show := app.Group("/show")
 	show.Get("/resume/:resumeId", handles.Resume{}.ShowResume)
 
