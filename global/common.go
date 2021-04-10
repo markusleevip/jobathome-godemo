@@ -21,11 +21,13 @@ var (
 	JwtTimeout = 129600
 	BaseUrl    = ""
 	Redis      *redis.Client
+	ResPath    = ""
 )
 
 func Initialize() {
 	JwtSecret = initialize.Application.JwtSecret
 	BaseUrl = initialize.Application.BaseUrl
+	ResPath = initialize.Application.ResPath
 
 	if timeout, err := strconv.Atoi(initialize.Application.JwtTimeout); err != nil {
 	} else {

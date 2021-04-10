@@ -25,3 +25,11 @@ func StructToJsonStr(e interface{}) (string, error) {
 		return "", err
 	}
 }
+
+// 检查开始时间与结束时间是否符合逻辑
+func CheckTime(startTime time.Time, endTime time.Time) bool {
+	if startTime.After(endTime) && !endTime.IsZero() {
+		return false
+	}
+	return true
+}

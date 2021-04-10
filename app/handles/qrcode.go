@@ -13,7 +13,7 @@ type Qrcode struct {
 
 // http://127.0.0.1:8001/qr?url=http://www.jobathome.cn
 func QrTest(ctx *fiber.Ctx) error {
-	url := ctx.FormValue("url", "http://www.jobathome.cn")
+	url := ctx.FormValue("url", "https://www.jobathome.cn")
 	fmt.Println(url)
 	var png []byte
 	png, err := qrcode.Encode(url, qrcode.Medium, 256)

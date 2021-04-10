@@ -11,6 +11,7 @@ type application struct {
 	JwtSecret     string
 	JwtTimeout    string
 	BaseUrl       string
+	ResPath       string
 }
 
 func initApplication(cfg *viper.Viper) *application {
@@ -21,6 +22,7 @@ func initApplication(cfg *viper.Viper) *application {
 		JwtSecret:  cfg.GetString("jwtSecret"),
 		JwtTimeout: cfg.GetString("jwtTimeout"),
 		BaseUrl:    cfg.GetString("baseUrl"),
+		ResPath:    cfg.GetString("resPath"),
 	}
 }
 

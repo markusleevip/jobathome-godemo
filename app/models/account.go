@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"go-server/global"
 	"go-server/utils"
 )
@@ -26,9 +25,7 @@ func (Account) TableName() string {
 
 func (t *Account) Create() {
 	t.Salt = utils.RandStr(16)
-	fmt.Println(t.Salt)
 	t.Password = utils.Sha1(t.Password + t.Salt)
-	fmt.Println(t.Password)
 	global.GDB.Create(t)
 }
 

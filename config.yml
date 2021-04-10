@@ -8,6 +8,7 @@ application:
   jwtSecret: JobAtHome
   jwtTimeout: 1440 # 60 * 24 分钟
   baseUrl: http://127.0.0.1:8088/#
+  resPath: d:/data/jobathome/
 
 database:
   # 数据库类型 mysql，sqlite3， postgres

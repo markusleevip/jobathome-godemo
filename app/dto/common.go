@@ -1,6 +1,9 @@
 package dto
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"math"
+)
 
 type PageInfo struct {
 	Page     int `json:"page" form:"page"`
@@ -8,10 +11,11 @@ type PageInfo struct {
 }
 
 type PageResult struct {
-	List     interface{} `json:"list"`
-	Total    int64       `json:"total"`
-	Page     int         `json:"page"`
-	PageSize int         `json:"pageSize"`
+	List  interface{} `json:"list"`
+	Total int64       `json:"total"`
+	Page  int         `json:"page"`
+	Pages int         `json:"pages" `
+	PageSize int `json:"pageSize"`
 }
 
 //分页封装
@@ -29,4 +33,8 @@ func Paginate(info PageInfo) func(db *gorm.DB) *gorm.DB {
 		offset := (info.Page - 1) * info.PageSize
 		return db.Offset(offset).Limit(info.PageSize)
 	}
+}
+
+func GePages(total int64  ,pageSize int) int{
+	return int(math.Ceil(float64(total+int64(pageSize)-1)) / float64(pageSize))
 }
