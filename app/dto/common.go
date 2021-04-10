@@ -35,6 +35,6 @@ func Paginate(info PageInfo) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func GePages(total int64  ,pageSize int) int{
+func GetPages(total int64  ,pageSize int) int{
 	return int(math.Ceil(float64(total+int64(pageSize)-1)) / float64(pageSize))
 }

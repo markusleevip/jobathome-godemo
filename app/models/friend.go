@@ -35,7 +35,7 @@ func (f *Friend) GetFollowPage(info dto.PageInfo) (result dto.PageResult, err er
 			List:     list,
 			Total:    count,
 			Page:     info.Page,
-			Pages:    dto.GePages(count,info.PageSize),
+			Pages:    dto.GetPages(count,info.PageSize),
 			PageSize: info.PageSize,
 		}, nil
 	}
@@ -66,7 +66,7 @@ func (f *Friend) GetFansPage(info dto.PageInfo) (result dto.PageResult, err erro
 			List:     list,
 			Total:    count,
 			Page:     info.Page,
-			Pages:    dto.GePages(count,info.PageSize),
+			Pages:    dto.GetPages(count,info.PageSize),
 			PageSize: info.PageSize,
 		}, nil
 	}
