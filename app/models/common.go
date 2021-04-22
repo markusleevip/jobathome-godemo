@@ -12,7 +12,7 @@ type Common struct {
 经历模板
 */
 type Experience struct {
-	Uid    string    `json:"uid" gorm:"size:32;comment:用户id"`
+	Uid       string    `json:"uid" gorm:"size:32;comment:用户id"`
 	StartTime time.Time `json:"startTime" gorm:"type:date;comment:开始时间"`
 	EndTime   time.Time `json:"endTime" gorm:"type:date;comment:结束时间"`
 	Sort      int       `json:"sort" gorm:"size:4;DEFAULT:0;"`

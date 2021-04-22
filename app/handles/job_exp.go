@@ -9,7 +9,6 @@ import (
 )
 
 type JobExp struct {
-
 }
 
 func (JobExp) Save(ctx *fiber.Ctx) error {

@@ -6,8 +6,10 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"go-server/app/dto"
 	"go-server/app/models"
+	"go-server/global"
 	"go-server/kit"
 	"go-server/utils"
+	"log"
 )
 
 type Resume struct {
@@ -62,4 +64,23 @@ func (Resume) ShowResume(ctx *fiber.Ctx) error {
 		res := dto.ResumeRes{Uid: table.Uid, ResumeId: table.ResumeId, Content: table.Content, IsOpen: table.IsOpen}
 		return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 	}
+}
+
+func (Resume) Resumes(ctx *fiber.Ctx) error {
+
+	global.Logger.Info("call Resumes.")
+	page := dto.PageInfo{PageSize: 10}
+	if err := ctx.BodyParser(&page); err != nil {
+		log.Println(err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse json.",
+		})
+	}
+	model := models.Resume{}
+	if tables, err := model.GetResumePage(page); err != nil {
+		return ctx.Status(fiber.StatusOK).JSON(kit.Ok())
+	} else {
+		return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(tables))
+	}
+
 }

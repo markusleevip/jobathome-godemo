@@ -38,7 +38,7 @@ func (t *ProjectExp) Delete() {
 }
 
 func (t *ProjectExp) List() (list []dto.ProjectExpRes) {
-	global.GDB.Table(t.TableName()).Select("uid, project_id, project_name, content, is_open, " +
+	global.GDB.Table(t.TableName()).Select("uid, project_id, project_name, content, is_open, "+
 		" start_time, end_time").Where("uid = ? ", t.Uid).Order(" start_time desc ").Find(&list)
 	return list
 }

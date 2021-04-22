@@ -11,11 +11,11 @@ type PageInfo struct {
 }
 
 type PageResult struct {
-	List  interface{} `json:"list"`
-	Total int64       `json:"total"`
-	Page  int         `json:"page"`
-	Pages int         `json:"pages" `
-	PageSize int `json:"pageSize"`
+	List     interface{} `json:"list"`
+	Total    int64       `json:"total"`
+	Page     int         `json:"page"`
+	Pages    int         `json:"pages" `
+	PageSize int         `json:"pageSize"`
 }
 
 //分页封装
@@ -35,6 +35,6 @@ func Paginate(info PageInfo) func(db *gorm.DB) *gorm.DB {
 	}
 }
 
-func GetPages(total int64  ,pageSize int) int{
+func GetPages(total int64, pageSize int) int {
 	return int(math.Ceil(float64(total+int64(pageSize)-1)) / float64(pageSize))
 }

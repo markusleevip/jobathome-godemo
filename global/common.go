@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/go-redis/redis"
 	"go-server/initialize"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -22,6 +23,7 @@ var (
 	BaseUrl    = ""
 	Redis      *redis.Client
 	ResPath    = ""
+	Logger     *zap.Logger
 )
 
 func Initialize() {

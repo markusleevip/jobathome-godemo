@@ -33,3 +33,4 @@ func Initialize() {
 		RedisConf = initRedis(cfgRedis)
 	}
 }
+

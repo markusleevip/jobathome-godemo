@@ -1,6 +1,8 @@
 package models
 
 import (
+	"fmt"
+	"go-server/app/dto"
 	"go-server/global"
 	"go-server/utils"
 )
@@ -14,6 +16,13 @@ type Resume struct {
 	ResumeId string `json:"resumeId" gorm:"size:32;"`
 	Content  string `json:"content" gorm:"type:varchar(4000);comment:正文"`
 	IsOpen   bool   `json:"isOpen"  gorm:"size:1;DEFAULT:false;comment:是否公开"`
+}
+
+type ResumeDto struct {
+	Content  string `json:"content"`
+	NickName string `json:"nickName"`
+	ResumeId string `json:"resumeId"`
+	Uid string `json:"uid"`
 }
 
 func (Resume) TableName() string {
@@ -46,4 +55,25 @@ func (t *Resume) GetOpenResume() (table Resume, err error) {
 	} else {
 		return table, nil
 	}
+}
+
+func (t *Resume) GetResumePage(info dto.PageInfo) (result dto.PageResult, err error) {
+	var list []ResumeDto
+	var count int64
+	// select t.content,a.nick_name from t_resume t INNER JOIN t_account a ON t.uid = a.uid WHERE is_open = 1 ORDER BY t.updated_at DESC;
+	table := global.GDB.Table(t.TableName() + " t ").Select([]string{"t.content", "a.nick_name","t.resume_id","a.uid"})
+	table = table.Joins(fmt.Sprintf(" INNER JOIN %s a ON t.uid = a.uid ", Account{}.TableName()))
+	table.Where(" is_open = 1 ").Count(&count)
+	if err = table.Scopes(dto.Paginate(info)).Order(" t.updated_at DESC ").Find(&list, " is_open = 1 ").Error; err != nil {
+		return result, err
+	} else {
+		return dto.PageResult{
+			List:     list,
+			Total:    count,
+			Page:     info.PageSize,
+			Pages:    dto.GetPages(count, info.PageSize),
+			PageSize: info.PageSize,
+		}, nil
+	}
+
 }

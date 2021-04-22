@@ -13,6 +13,7 @@ import (
 var (
 	static embed.FS
 )
+
 func InitRoutes(app *fiber.App) {
 	// 登录
 	app.Get("/login", handles.Login)
@@ -36,11 +37,12 @@ func InitRoutes(app *fiber.App) {
 	my.Put("/project/save", handles.ProjectExp{}.Save)
 	my.Post("/project/list", handles.ProjectExp{}.MyList)
 
-	app.Use("/res",filesystem.New(filesystem.Config{
+	app.Use("/res", filesystem.New(filesystem.Config{
 		Root: http.Dir(global.ResPath),
 	}))
 
 	show := app.Group("/show")
 	show.Get("/resume/:resumeId", handles.Resume{}.ShowResume)
+	app.Post("/list",handles.Resume{}.Resumes)
 
 }
