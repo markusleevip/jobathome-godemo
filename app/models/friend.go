@@ -71,3 +71,37 @@ func (f *Friend) GetFansPage(info dto.PageInfo) (result dto.PageResult, err erro
 		}, nil
 	}
 }
+
+
+// 粉丝列表
+func (f *Friend) GetFansNewPage(info dto.PageInfo) (result dto.PageResult, err error) {
+	var list []FriendDto
+	var count int64
+	table := global.GDB.Table(fmt.Sprintf("( select f.uid ,a.nick_name from t_friend f" +
+		" LEFT JOIN t_account a ON f.uid = a.uid where f.f_uid = '%s') AS follow",f.Uid)).Select("follow.*"," fans.f_uid")
+	table = table.Joins(fmt.Sprintf("LEFT JOIN (select f.f_uid ,a.nick_name from t_friend f LEFT JOIN t_account a ON f.f_uid = a.uid " +
+		"where f.uid = '%s') " +
+		"AS fans ON follow.uid = fans.f_uid", f.Uid))
+	if err = table.Scopes(dto.Paginate(info)).Find(&list).Error; err != nil {
+		return result, err
+	} else {
+		return dto.PageResult{
+			List:     list,
+			Total:    count,
+			Page:     info.Page,
+			Pages:    dto.GetPages(count, info.PageSize),
+			PageSize: info.PageSize,
+		}, nil
+	}
+}
+
+
+// 删除好友
+func (f *Friend) Delete() error {
+	err := global.GDB.Unscoped().Delete(&f,"uid = ? and f_uid = ?", f.Uid, f.FUid).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+

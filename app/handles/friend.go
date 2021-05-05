@@ -51,7 +51,7 @@ func (Friend) MyFans(ctx *fiber.Ctx) error {
 		}
 		model := models.Friend{}
 		model.Uid = token.Uid
-		if tables, err := model.GetFansPage(page); err != nil {
+		if tables, err := model.GetFansNewPage(page); err != nil {
 			return ctx.Status(fiber.StatusOK).JSON(kit.Ok())
 		} else {
 			fmt.Println(tables)
@@ -77,6 +77,31 @@ func (Friend) AddFollow(ctx *fiber.Ctx) error {
 		model.Uid = token.Uid
 		model.FUid = friendReq.FUid
 		if err := model.Create(); err != nil {
+			log.Println(err)
+			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+		return ctx.Status(fiber.StatusOK).JSON(kit.Ok())
+	}
+}
+
+// 取消关注
+func (Friend) UnFollow(ctx *fiber.Ctx) error {
+	if token, err := utils.GetTokenModel(ctx); err != nil {
+		return ctx.Status(fiber.StatusOK).JSON(kit.FailAndMsg(err.Error()))
+	} else {
+		friendReq := dto.Friend{}.FriendReq
+		if err := ctx.BodyParser(&friendReq); err != nil {
+			log.Println(err)
+			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+		model := models.Friend{}
+		model.Uid = token.Uid
+		model.FUid = friendReq.FUid
+		if err := model.Delete(); err != nil {
 			log.Println(err)
 			return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"error": err.Error(),

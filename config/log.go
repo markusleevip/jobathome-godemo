@@ -1,14 +1,14 @@
 package config
 
 import (
-	"fmt"
+	"github.com/natefinch/lumberjack"
 	"go-server/global"
 	"go-server/initialize"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
 
-func initLog(){
+func getEncoder() zapcore.Encoder {
 	encoderConfig := zapcore.EncoderConfig{
 		TimeKey:        "time",
 		LevelKey:       "level",
@@ -22,29 +22,27 @@ func initLog(){
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder, // 全路径编码器
 	}
-
-	// 设置日志级别
-	atom := zap.NewAtomicLevelAt(zap.DebugLevel)
-
-	config := zap.Config{
-		Level:            atom,                                                // 日志级别
-		Development:      true,                                                // 开发模式，堆栈跟踪
-		Encoding:         "json",                                              // 输出格式 console 或 json
-		EncoderConfig:    encoderConfig,                                       // 编码器配置
-		InitialFields:    map[string]interface{}{"serviceName": initialize.Application.Name}, // 初始化字段，如：添加一个服务器名称
-		OutputPaths:      []string{"stdout", initialize.Application.LogPath},            // 输出到指定文件 stdout（标准输出，正常颜色） stderr（错误输出，红色）
-		ErrorOutputPaths: []string{"stderr"},
+	return zapcore.NewConsoleEncoder(encoderConfig)
+}
+func getLogWriter(logPath string) zapcore.WriteSyncer {
+	lumberJackLogger := &lumberjack.Logger{
+		Filename:   logPath, // 日志文件路径，默认 os.TempDir()
+		MaxSize:    5,       // 每个日志文件保存10M，默认 100M
+		MaxBackups: 90,      // 保留90个备份，默认不限
+		MaxAge:     90,      // 保留90天，默认不限
+		Compress:   true,    // 是否压缩，默认不压缩
 	}
+	return zapcore.AddSync(lumberJackLogger)
+}
+
+func initLog() {
+
+	write := getLogWriter(initialize.Application.LogPath)
+	core := zapcore.NewTee(zapcore.NewCore(getEncoder(), zapcore.AddSync(write), zap.InfoLevel))
 
 	// 构建日志
-	logger, err := config.Build()
-	if err != nil {
-		fmt.Sprintf("log 初始化失败: %v", err)
-	}else{
-
-	}
+	logger := zap.New(core, zap.AddCaller())
 	logger.Info("log 初始化成功")
-
 	global.Logger = logger
 
 }

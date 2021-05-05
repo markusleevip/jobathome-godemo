@@ -6,7 +6,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"go-server/app/dto"
 	"go-server/app/models"
-	"go-server/global"
 	"go-server/kit"
 	"go-server/utils"
 	"log"
@@ -61,14 +60,18 @@ func (Resume) ShowResume(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusOK).JSON(kit.Ok())
 	} else {
 		fmt.Println(table)
+		_, found := utils.CacheGetID(resumeId, ctx)
+		if found {
+		} else {
+			utils.CacheSetID(resumeId, ctx)
+			table.UpdateVisits()
+		}
 		res := dto.ResumeRes{Uid: table.Uid, ResumeId: table.ResumeId, Content: table.Content, IsOpen: table.IsOpen}
 		return ctx.Status(fiber.StatusOK).JSON(kit.OkAndData(res))
 	}
 }
 
 func (Resume) Resumes(ctx *fiber.Ctx) error {
-
-	global.Logger.Info("call Resumes.")
 	page := dto.PageInfo{PageSize: 10}
 	if err := ctx.BodyParser(&page); err != nil {
 		log.Println(err)

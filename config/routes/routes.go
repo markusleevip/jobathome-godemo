@@ -34,6 +34,7 @@ func InitRoutes(app *fiber.App) {
 	my.Post("/follow", handles.Friend{}.MyFollow)
 	my.Post("/fans", handles.Friend{}.MyFans)
 	my.Put("/follow/add", handles.Friend{}.AddFollow)
+	my.Put("/follow/delete", handles.Friend{}.UnFollow)
 	my.Put("/project/save", handles.ProjectExp{}.Save)
 	my.Post("/project/list", handles.ProjectExp{}.MyList)
 
@@ -43,6 +44,6 @@ func InitRoutes(app *fiber.App) {
 
 	show := app.Group("/show")
 	show.Get("/resume/:resumeId", handles.Resume{}.ShowResume)
-	app.Post("/list",handles.Resume{}.Resumes)
+	app.Post("/list", handles.Resume{}.Resumes)
 
 }

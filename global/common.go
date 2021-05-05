@@ -3,10 +3,12 @@ package global
 import (
 	"database/sql"
 	"github.com/go-redis/redis"
+	"github.com/patrickmn/go-cache"
 	"go-server/initialize"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
 
 const (
@@ -24,7 +26,13 @@ var (
 	Redis      *redis.Client
 	ResPath    = ""
 	Logger     *zap.Logger
+	Cache      *cache.Cache
 )
+
+func init() {
+	// 默认缓存时间及清理过期缓存间隔时间
+	Cache = cache.New(3*time.Minute, 10*time.Minute)
+}
 
 func Initialize() {
 	JwtSecret = initialize.Application.JwtSecret
